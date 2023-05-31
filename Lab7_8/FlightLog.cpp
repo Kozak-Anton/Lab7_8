@@ -13,8 +13,9 @@ void FligthLog::load_from_file(System::Windows::Forms::DataGridView^ DataGridVie
 void FligthLog::load_to_file(System::Windows::Forms::DataGridView^ DataGridViewLog) const{
 	ofstream file(file_name);
 	FligthEntrie current;
-	for (int i = 0; i < DataGridViewLog->RowCount; ++i) {
-		
+	for (int i = 0; i < DataGridViewLog->RowCount-1; ++i) {
+		current.make_from_row(DataGridViewLog, i);
+		file << current;
 	}
 	file.close();
 }

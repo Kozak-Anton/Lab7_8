@@ -3,6 +3,7 @@
 #include <exception>
 #include <stdexcept>
 #include <fstream>
+#include <msclr\marshal_cppstd.h>
 
 class FligthEntrie {
 	std::string number;
@@ -16,7 +17,11 @@ public:
 		number(new_number), destination(new_destination), date(new_date), time(new_time) {};
 	void format_test(bool check_number = 1, bool check_destination = 1, bool check_date = 1, bool check_time = 1);
 	void add_to_table(System::Windows::Forms::DataGridView^);
-	void make_from_row();
+	void make_from_row(System::Windows::Forms::DataGridView^, int);
+	std::string get_number() const;
+	std::string get_destination() const;
+	std::string get_date() const;
+	std::string get_time() const;
 	friend std::ostream& operator<<(std::ostream&, FligthEntrie&);
 	friend std::istream& operator>>(std::istream&, FligthEntrie&);
 };

@@ -27,6 +27,29 @@ void FligthEntrie::add_to_table(System::Windows::Forms::DataGridView^ dataGridVi
 		gcnew System::String(date.c_str()), gcnew System::String(time.c_str()));
 }
 
+void FligthEntrie::make_from_row(System::Windows::Forms::DataGridView^ DataGridViewLog, int pos){
+	number = msclr::interop::marshal_as<std::string>(DataGridViewLog->Rows[pos]->Cells[0]->Value->ToString());
+	destination = msclr::interop::marshal_as<std::string>(DataGridViewLog->Rows[pos]->Cells[1]->Value->ToString());
+	date = msclr::interop::marshal_as<std::string>(DataGridViewLog->Rows[pos]->Cells[2]->Value->ToString());
+	time = msclr::interop::marshal_as<std::string>(DataGridViewLog->Rows[pos]->Cells[3]->Value->ToString());
+}
+
+std::string FligthEntrie::get_number() const{
+	return number;
+}
+
+std::string FligthEntrie::get_destination() const{
+	return destination;
+}
+
+std::string FligthEntrie::get_date() const{
+	return date;
+}
+
+std::string FligthEntrie::get_time() const{
+	return time;
+}
+
 
 std::ostream& operator<<(std::ostream& output, FligthEntrie& entrie) {
 	output << entrie.number << "," << entrie.destination << "," << entrie.date << "," << entrie.time << ";" << flush;
