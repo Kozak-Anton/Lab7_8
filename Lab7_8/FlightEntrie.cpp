@@ -66,6 +66,8 @@ std::istream& operator>>(std::istream& input, FligthEntrie& entrie) {
 
 int FormatError::get_format_number(std::string line, char sep, int& pos){
 	int temp = 0;
+	if (pos >= line.length()) return -1;
+
 	while (pos < line.length() && line[pos] != sep) {
 		if (!isdigit(line[pos])) return -1;
 		temp = temp * 10 + line[pos] - '0';

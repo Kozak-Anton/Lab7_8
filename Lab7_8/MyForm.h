@@ -114,7 +114,7 @@ namespace $safeprojectname$ {
 			this->dataGridViewLog->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 			this->dataGridViewLog->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(4) {
 				this->ColumnNumber,
-				this->ColumnDestination, this->ColumnDate, this->ColumnTime
+					this->ColumnDestination, this->ColumnDate, this->ColumnTime
 			});
 			dataGridViewCellStyle2->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleLeft;
 			dataGridViewCellStyle2->BackColor = System::Drawing::SystemColors::Window;
@@ -333,12 +333,9 @@ namespace $safeprojectname$ {
 			this->ResumeLayout(false);
 			this->PerformLayout();
 			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
-			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &MyForm::MyForm_FormClosing);
-
-			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &StartForm::StartForm_FormClosing);
-
+			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &MyForm::MyForm_FormClosed);
 		}
-		
+
 #pragma endregion
 		FligthEntrie make_FlightEntrie() {
 			std::string number = msclr::interop::marshal_as<std::string>(textBoxNumber->Text);
@@ -358,7 +355,7 @@ namespace $safeprojectname$ {
 
 		void find_rows(int& search_res, int* search_pos) {
 			bool match;
-			for (int i = 0; i < dataGridViewLog->Rows->Count-1; ++i) {
+			for (int i = 0; i < dataGridViewLog->Rows->Count - 1; ++i) {
 				match = false;
 				if (System::String::IsNullOrEmpty(textBoxNumber->Text) || textBoxNumber->Text == dataGridViewLog->Rows[i]->Cells[0]->Value->ToString()) {
 					match = true;
@@ -380,62 +377,63 @@ namespace $safeprojectname$ {
 			}
 		}
 
-		private: System::Void buttonAdd_Click(System::Object^ sender, System::EventArgs^ e) {
-			for (int i = 0; i < dataGridViewLog->Rows->Count - 1; ++i) dataGridViewLog->Rows[i]->Visible = true;
-			errorProvider1->Clear();
-			FligthEntrie current = make_FlightEntrie();
-			
-			try {
-				current.format_test();
-			}
-			catch (FormatError& err) {
-				set_input_errors(err);
-				return;
-			}
-			current.add_to_table(dataGridViewLog);
+	private: System::Void buttonAdd_Click(System::Object^ sender, System::EventArgs^ e) {
+		for (int i = 0; i < dataGridViewLog->Rows->Count - 1; ++i) dataGridViewLog->Rows[i]->Visible = true;
+		errorProvider1->Clear();
+		FligthEntrie current = make_FlightEntrie();
 
+		try {
+			current.format_test();
 		}
-		
-		private: System::Void buttonDelete_Click(System::Object^ sender, System::EventArgs^ e) {
-			for (int i = 0; i < dataGridViewLog->Rows->Count - 1; ++i) dataGridViewLog->Rows[i]->Visible = true;
-			if (dataGridViewLog->SelectedCells->Count > 0)
-			{
-				dataGridViewLog->Rows->RemoveAt(dataGridViewLog->SelectedCells[0]->RowIndex);
-			}
+		catch (FormatError& err) {
+			set_input_errors(err);
+			return;
 		}
-		private: System::Void buttonFind_Click(System::Object^ sender, System::EventArgs^ e) {
-			errorProvider1->Clear();
-			FligthEntrie current = make_FlightEntrie();
-			int search_pos[MAX_ENTRIES];
-			int search_res = 0;
+		current.add_to_table(dataGridViewLog);
 
-			try {
-				current.format_test(!(current.get_number()).empty(), !(current.get_destination()).empty(),
-					!(current.get_date()).empty(), !(current.get_time()).empty());
-			}
-			catch (FormatError& err) {
-				set_input_errors(err);
-				return;
-			}
+	}
 
-			find_rows(search_res, search_pos);
-			for (int i = 0; i < dataGridViewLog->Rows->Count-1; ++i) dataGridViewLog->Rows[i]->Visible = false;
-
-			for (int i = 0; i < search_res; ++i) {
-				dataGridViewLog->Rows[search_pos[i]]->Visible = true;
-			}
+	private: System::Void buttonDelete_Click(System::Object^ sender, System::EventArgs^ e) {
+		for (int i = 0; i < dataGridViewLog->Rows->Count - 1; ++i) dataGridViewLog->Rows[i]->Visible = true;
+		if (dataGridViewLog->SelectedCells->Count > 0)
+		{
+			dataGridViewLog->Rows->RemoveAt(dataGridViewLog->SelectedCells[0]->RowIndex);
 		}
-		private: System::Void buttonClear_Click(System::Object^ sender, System::EventArgs^ e) {
-			for (int i = 0; i < dataGridViewLog->Rows->Count - 1; ++i) dataGridViewLog->Rows[i]->Visible = true;
-			dataGridViewLog->Rows->Clear();
+	}
+	private: System::Void buttonFind_Click(System::Object^ sender, System::EventArgs^ e) {
+		errorProvider1->Clear();
+		FligthEntrie current = make_FlightEntrie();
+		int search_pos[MAX_ENTRIES];
+		int search_res = 0;
+
+		try {
+			current.format_test(!(current.get_number()).empty(), !(current.get_destination()).empty(),
+				!(current.get_date()).empty(), !(current.get_time()).empty());
+		}
+		catch (FormatError& err) {
+			set_input_errors(err);
+			return;
 		}
 
-		private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
-			data_grid_contents->load_from_file(dataGridViewLog);
-		}
-		private: System::Void MyForm_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
-			data_grid_contents->load_to_file(dataGridViewLog);
-		}
+		find_rows(search_res, search_pos);
+		for (int i = 0; i < dataGridViewLog->Rows->Count - 1; ++i) dataGridViewLog->Rows[i]->Visible = false;
 
-};
+		for (int i = 0; i < search_res; ++i) {
+			dataGridViewLog->Rows[search_pos[i]]->Visible = true;
+		}
+	}
+	private: System::Void buttonClear_Click(System::Object^ sender, System::EventArgs^ e) {
+		for (int i = 0; i < dataGridViewLog->Rows->Count - 1; ++i) dataGridViewLog->Rows[i]->Visible = true;
+		dataGridViewLog->Rows->Clear();
+	}
+
+	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
+		data_grid_contents->load_from_file(dataGridViewLog);
+	}
+
+	private: System::Void MyForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
+		data_grid_contents->load_to_file(dataGridViewLog);
+	}
+
+	};
 }
