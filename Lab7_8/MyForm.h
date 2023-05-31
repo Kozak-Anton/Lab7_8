@@ -332,6 +332,10 @@ namespace $safeprojectname$ {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->errorProvider1))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
+			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
+			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &MyForm::MyForm_FormClosing);
+
+			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &StartForm::StartForm_FormClosing);
 
 		}
 		
@@ -432,5 +436,6 @@ namespace $safeprojectname$ {
 		private: System::Void MyForm_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
 			data_grid_contents->load_to_file(dataGridViewLog);
 		}
+
 };
 }
