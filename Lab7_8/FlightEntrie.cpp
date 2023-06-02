@@ -52,7 +52,7 @@ std::string FligthEntrie::get_time() const{
 
 
 std::ostream& operator<<(std::ostream& output, FligthEntrie& entrie) {
-	output << entrie.number << "," << entrie.destination << "," << entrie.date << "," << entrie.time << ";" << flush;
+	output << entrie.number << "," << entrie.destination << "," << entrie.date << "," << entrie.time << "\n" << flush;
 	return output;
 }
 
@@ -60,7 +60,7 @@ std::istream& operator>>(std::istream& input, FligthEntrie& entrie) {
 	getline(input, entrie.number, ',');
 	getline(input, entrie.destination, ',');
 	getline(input, entrie.date, ',');
-	getline(input, entrie.time, ';');
+	getline(input, entrie.time, '\n');
 	return input;
 }
 

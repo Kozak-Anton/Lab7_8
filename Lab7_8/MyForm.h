@@ -395,7 +395,7 @@ namespace $safeprojectname$ {
 
 	private: System::Void buttonDelete_Click(System::Object^ sender, System::EventArgs^ e) {
 		for (int i = 0; i < dataGridViewLog->Rows->Count - 1; ++i) dataGridViewLog->Rows[i]->Visible = true;
-		if (dataGridViewLog->SelectedCells->Count > 0)
+		if (dataGridViewLog->SelectedCells->Count > 0 && dataGridViewLog->SelectedCells[0]->RowIndex != dataGridViewLog->Rows->Count-1)
 		{
 			dataGridViewLog->Rows->RemoveAt(dataGridViewLog->SelectedCells[0]->RowIndex);
 		}
